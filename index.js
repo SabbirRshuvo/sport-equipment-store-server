@@ -24,20 +24,23 @@ async function run() {
     await client.connect();
     console.log("mongodb is connected");
 
-    const database = client.db("addEquipment");
-    const usersCollection = database.collection("store");
+    const database = client.db("equipmentList");
+    const equipmentCollection = database.collection("store");
+
+    const database2 = client.db("usersDB");
+    const usersCollection = database2.collection("users");
 
     // create a users to server to client
     app.post("/add_equipment", async (req, res) => {
       const query = req.body;
       console.log("created new users", query);
-      const result = await usersCollection.insertOne(query);
+      const result = await equipmentCollection.insertOne(query);
       res.send(result);
     });
 
     //display this equipment
     app.get("/add_equipment", async (req, res) => {
-      const cursor = usersCollection.find();
+      const cursor = equipmentCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
@@ -46,7 +49,7 @@ async function run() {
     app.get("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await usersCollection.findOne(query);
+      const result = await equipmentCollection.findOne(query);
       res.send(result);
     });
 
@@ -55,8 +58,25 @@ async function run() {
       const id = req.params.id;
 
       const query = { _id: new ObjectId(id) };
-      const result = await usersCollection.deleteOne(query);
+      const result = await equipmentCollection.deleteOne(query);
       res.send(result);
+    });
+
+    // create users collection
+
+    app.post("/users_list", async (req, res) => {
+      const query = req.body;
+      console.log("user is done", query);
+      const result = await usersCollection.insertOne(query);
+      res.send(result);
+    });
+
+    // get the users
+
+    app.get("/users_list", async (req, res) => {
+      const query = usersCollection.find();
+      const cursor = await query.toArray();
+      res.send(cursor);
     });
 
     app.get("/", async (req, res) => {
