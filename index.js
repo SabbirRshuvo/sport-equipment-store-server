@@ -59,7 +59,7 @@ async function run() {
       res.send(result);
     });
 
-    // update the user crud operation
+    // update the user crud
 
     app.put("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
