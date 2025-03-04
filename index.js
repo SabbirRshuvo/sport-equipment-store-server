@@ -27,7 +27,6 @@ async function run() {
     const database = client.db("equipmentList");
     const equipmentCollection = database.collection("store");
 
-    // create a users to server to client
     app.post("/add_equipment", async (req, res) => {
       const query = req.body;
       console.log("created new users", query);
@@ -35,14 +34,12 @@ async function run() {
       res.send(result);
     });
 
-    //display this equipment
     app.get("/add_equipment", async (req, res) => {
       const cursor = equipmentCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    // delete user
     app.delete("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
 
@@ -51,15 +48,12 @@ async function run() {
       res.send(result);
     });
 
-    // find a user
     app.get("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await equipmentCollection.findOne(query);
       res.send(result);
     });
-
-    // update the user crud
 
     app.put("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
