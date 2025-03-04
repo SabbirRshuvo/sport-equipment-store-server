@@ -42,6 +42,15 @@ async function run() {
       res.send(result);
     });
 
+    // delete user
+    app.delete("/add_equipment/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: new ObjectId(id) };
+      const result = await equipmentCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // find a user
     app.get("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
@@ -50,12 +59,25 @@ async function run() {
       res.send(result);
     });
 
-    // delete user
-    app.delete("/add_equipment/:id", async (req, res) => {
+    app.put("/add_equipment/:id", async (req, res) => {
       const id = req.params.id;
-
       const query = { _id: new ObjectId(id) };
-      const result = await equipmentCollection.deleteOne(query);
+      const options = { upsert: true };
+      const updateStore = req.body;
+      const store = {
+        $set: {
+          itemName: updateStore.itemName,
+          categoryName: updateStore.categoryName,
+          description: updateStore.description,
+          price: updateStore.price,
+          rating: updateStore.rating,
+          customization: updateStore.customization,
+          processingTime: updateStore.processingTime,
+          stockStatus: updateStore.stockStatus,
+          image: updateStore.image,
+        },
+      };
+      const result = await equipmentCollection.updateOne(query, store, options);
       res.send(result);
     });
 
